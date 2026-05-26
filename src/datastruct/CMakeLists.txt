@@ -1,0 +1,7 @@
+add_subdirectory(lock_free_stack)
+add_subdirectory(table)
+add_subdirectory(tree)
+add_subdirectory(hash)
+add_subdirectory(heap)
+add_subdirectory(disjset)
+add_subdirectory(kfifo_cpp)

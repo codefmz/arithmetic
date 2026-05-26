@@ -1,0 +1,2 @@
+add_subdirectory(hashlist)
+add_subdirectory(hashsquare)
