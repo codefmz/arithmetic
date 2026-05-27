@@ -28,6 +28,7 @@ public:
     uint32_t put(const char *data, uint32_t len);
 
     uint32_t get(char * rbuf, uint32_t len);
+
 private:
     uint32_t roundup_pow_of_two(uint32_t x) {
         uint32_t b = 0;

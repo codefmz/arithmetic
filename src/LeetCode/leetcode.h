@@ -573,3 +573,17 @@ void reverseStr();
 
 
 int calculate(string s);
+
+//计算后缀表达式的值
+int calculateStack(const vector<string>& vct);
+/*
+* 将 s 分隔为数值与符号，存放到 vct 中
+*/
+void strSplit(vector<string>& vct, const string& s);
+
+void getPostfix(vector<string>& vct, const vector<string>& splitVct);
+
+bool isWord(const string& s);
+
+int getOpPriority(const string& word);
+

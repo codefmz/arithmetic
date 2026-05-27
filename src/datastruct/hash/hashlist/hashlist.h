@@ -6,11 +6,8 @@
 #include <list>
 #include <algorithm>
 #include <random>
-#include <ctime>
 #include <map>
-#include <
-
-using namespace std;
+#include "hash.h"
 
 //散列： 分离链接法
 template <typename HashObj>
@@ -70,15 +67,13 @@ public:
     void printHashTable() {
         for (auto & list : theList) {
             for (auto & obj : list) {
-                cout << obj << " ";
+                std::cout << obj << " ";
             }
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
 private:
-    vector<list<HashObj>> theList;
-    int currentSize;
     void rehash() {
         auto oldList = theList;
         theList.resize(nextPrime(2 * theList.size()));
@@ -94,6 +89,10 @@ private:
         static mhash<HashObj> hh;
         return hh(x) % theList.size();
     }
+
+private:
+    std::vector<std::list<HashObj>> theList;
+    int currentSize;
 };
 
 #endif

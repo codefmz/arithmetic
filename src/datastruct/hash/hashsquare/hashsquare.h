@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// 开放寻址法解决hash 冲突
 template <typename HashObj>
 class HashTable
 {

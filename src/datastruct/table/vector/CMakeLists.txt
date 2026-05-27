@@ -1,6 +1,4 @@
 file(GLOB SRC "./*.cpp")
 
-add_library(libvector STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(libvector PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(vector STATIC ${SRC})
+target_include_directories(vector PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

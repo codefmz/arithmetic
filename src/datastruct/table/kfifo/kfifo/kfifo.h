@@ -11,7 +11,7 @@ extern "C" {
 #endif
 
 struct kfifo {
-    char *buffer;  /* the buffer holding the data */
+    char *buffer;       /* the buffer holding the data */
     uint32_t size;      /* the size of the allocated buffer */
     uint32_t in;        /* data is added at offset (in % size) */
     uint32_t out;       /* data is extracted from off. (out % size) */

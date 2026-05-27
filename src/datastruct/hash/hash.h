@@ -3,24 +3,9 @@
 
 #include <string>
 
-using namespace std;
-bool isPrime(size_t aNum) {
-    for (size_t i = 2; i <= sqrt(aNum); ++i) {
-        if (aNum % i == 0) {
-            return false;
-        }
-    }
-    return true;
-}
+bool isPrime(size_t aNum);
 
-size_t nextPrime(size_t num) {
-    for (size_t i = num; i > 1; --i) {
-        if (isPrime(i)) {
-            return i;
-        }
-    }
-    return 1;
-}
+size_t nextPrime(size_t num);
 
 template<typename Key>
 class mhash {
@@ -43,7 +28,7 @@ public:
 };
 
 template<>
-class mhash<int> {
+class cd<int> {
 public:
     size_t operator()(const int& key) const {
         return key;

@@ -1,6 +1,4 @@
 file(GLOB SRC "./*.cpp")
 
-add_library(libdisjset STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(libdisjset PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(disjset STATIC ${SRC})
+target_include_directories(disjset PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

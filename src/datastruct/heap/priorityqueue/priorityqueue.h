@@ -67,8 +67,6 @@ public:
         currentSize = 0;
     }
 private:
-    int currentSize;
-    vector<Object> array;
     void buildHeap() {
         for (int hole = currentSize / 2; hole > 0; --hole) {
             percolateDown(hole);
@@ -91,10 +89,10 @@ private:
         }
         array[hole] = move(temp);
     }
+
+private:
+    int currentSize;
+    vector<Object> array;
 };
-
-void testBinaryHeap();
-
-void testKthLargestHeap();
 
 #endif
