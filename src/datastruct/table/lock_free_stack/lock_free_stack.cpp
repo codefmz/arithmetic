@@ -19,56 +19,45 @@ protected:
 };
 
 TEST_F(lockFreeStackTest, lockFreeStackTest1) {
-    lock_free_stack freeStack;
-    lock_free_stack usedStack;
+    lock_free_stack<int> usedStack;
 
-    Node *node;
+    int value = 0;
     for (int i = 0; i < 100; ++i) {
-        node = new Node(0);
-        freeStack.push(node);
+        usedStack.push(i);
     }
 
     for (int i = 0; i < 100; ++i) {
-        node = freeStack.pop();
-        node->data = i;
-        usedStack.push(node);
-    }
-
-    for (int i = 0; i < 100; ++i) {
-        node = usedStack.pop();
-        EXPECT_EQ(node->data, 100 - i - 1);
+        EXPECT_TRUE(usedStack.pop(value));
+        EXPECT_EQ(value, 100 - i - 1);
     }
 }
 
 std::atomic<int> num(0);
-void threadPush(lock_free_stack &freeStack)
+void threadPush(lock_free_stack<int> &stack)
 {
     int count = 100;
-    Node *node;
     while (count--) {
-        node = new Node(0);
-        freeStack.push(node);
+        stack.push(count);
         num.fetch_add(1);
     }
 }
 
 std::atomic<int> num2(0);
-void threadPop(lock_free_stack &freeStack, lock_free_stack &usedStack)
+void threadPop(lock_free_stack<int> &freeStack, lock_free_stack<int> &usedStack)
 {
-    Node *node;
+    int value = 0;
     do {
-        node = freeStack.pop();
-        if (node == nullptr) {
+        if (!freeStack.pop(value)) {
             break;
         }
-        usedStack.push(node);
+        usedStack.push(value);
         num2.fetch_add(1);
     } while (true);
 }
 
 TEST_F(lockFreeStackTest, lockFreeStackTest2) {
-    lock_free_stack freeStack;
-    lock_free_stack usedStack;
+    lock_free_stack<int> freeStack;
+    lock_free_stack<int> usedStack;
 
     std::array<std::thread, 4> threads;
     for (int i = 0; i < 4; ++i) {
@@ -88,8 +77,9 @@ TEST_F(lockFreeStackTest, lockFreeStackTest2) {
     }
 
     int i = 0;
+    int value = 0;
     while (true) {
-        if (usedStack.pop() == nullptr) {
+        if (!usedStack.pop(value)) {
             break;
         }
         ++i;

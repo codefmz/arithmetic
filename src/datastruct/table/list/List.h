@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 template <typename Object>
 class List {
 private:
@@ -7,14 +9,12 @@ private:
         Node* next;
 
         Node(const Object& d = Object{}, Node* p = nullptr, Node* n = nullptr)
-            :data(d), prev(p), next{ n }{}
+            :data(d), prev(p), next{n}{}
         Node(Object&& d, Node* p = nullptr, Node* n = nullptr)
-            :data(move(d)), prev(p), next{ n }{}
+            :data(move(d)), prev(p), next{n}{}
     };
+
 private:
-    size_t theSize;
-    Node* tail;
-    Node* head;
     void init() {
         theSize = 0;
         head = new Node;
@@ -22,12 +22,13 @@ private:
         head->next = tail;
         tail->prev = head;
     }
+
 public:
     class const_iterator {
     protected:
         Node* current;// 不希望用户能够直接访问到节点，而是只能通过迭代器去访问
-        const_iterator(Node* p) :current{ p } {};
-        const_iterator() :current{ nullptr } {};
+        const_iterator(Node* p) : current{p} {};
+        const_iterator() : current{nullptr} {};
         friend class List<Object>;
     public:
         const Object& operator*() {
@@ -51,16 +52,16 @@ public:
         }
     };
 
-    class iterator :public const_iterator {
+    class iterator : public const_iterator {
     protected:
-        iterator(Node* p) :const_iterator(p) {};
+        iterator(Node* p) : const_iterator(p) {};
 
         friend class List<Object>;
     public:
         Object& operator*() {
             return const_iterator::current->data;
         }
-        iterator& operator++()  {
+        iterator& operator++() {
             this->current = this->current->next;
             return *this;
         }
@@ -73,17 +74,18 @@ public:
             this->current = this->current->prev;
             return *this;
         }
-        iterator& operator--(int)
-        {
+        iterator& operator--(int) {
             iterator old = *this;
             --(*this);
             return old;
         }
     };
+
 public:
     List() {
         init();
     }
+
     ~List() {
         if (head && tail) {
             clear();
@@ -93,31 +95,32 @@ public:
             tail = nullptr;
         }
     }
+
     List(const List& list) {
-        cout << __FILE__ << "(" << __LINE__ << "): " << __func__ << " list copy construct" << endl;
         init();
         for (auto x : list) {
             push_back(x);
         }
     }
+
     List& operator=(const List& list) {
-        cout << __FILE__ << "(" << __LINE__ << "): " << __func__ << " list operator = " << endl;
         List copy = list;
         std::swap(*this, copy);
         return *this;
     }
+
     List(List&& list) noexcept :theSize(list.theSize), head(list.head), tail(list.tail) {
-        cout << __FILE__ << "(" << __LINE__ << "): " << __func__ << " left value reference " << endl;
         list.theSize = 0;
         list.head = list.tail = nullptr;
     };
+
     List& operator=(List&& list) noexcept {
-        cout << __FILE__ << "(" << __LINE__ << "): " << __func__ << " right value refence = " << endl;
         swap(theSize, list.theSize);
         swap(head, list.head);
         swap(tail, list.tail);
         return *this;
     }
+
     iterator begin() const {
         return iterator(head->next);
     }
@@ -168,6 +171,7 @@ public:
     void pop_front() {
         erase(begin());
     }
+
     iterator insert(iterator itr, const Object& x) {
         Node* p = itr.current;
         theSize++;
@@ -175,6 +179,7 @@ public:
         p->prev = p->prev->next = newNode;
         return newNode;
     }
+
     iterator insert(iterator itr, Object&& x) {
         Node* p = itr.current;
         theSize++;
@@ -182,6 +187,7 @@ public:
         p->prev = p->prev->next = newNode;
         return newNode;
     }
+
     iterator erase(iterator itr) {
         assertIsValid(itr);
         Node* p = itr.current;
@@ -192,15 +198,22 @@ public:
         theSize--;
         return retVal;
     }
+
     iterator erase(iterator from, iterator to) {
         while (from != to) {
             from = erase(from);
         };
         return to;
     }
+
     bool assertIsValid(const iterator& iter) {
         if (!iter.current || iter.current == head || iter.current == tail) {
-            throw runtime_error(" iterator is valid!");
+            throw std::runtime_error(" iterator is valid!");
         }
     }
+
+private:
+    size_t theSize;
+    Node* tail;
+    Node* head;
 };

@@ -4,13 +4,12 @@
 #include <vector>
 #include <exception>
 #include <stdexcept>
-using namespace std;
 
 template <typename Object>
 class BinaryHeap {
 public:
     explicit BinaryHeap(int capacity = 100) :array(capacity), currentSize(0) {}
-    explicit BinaryHeap(const vector<Object>& items) :array(items) {
+    explicit BinaryHeap(const std::vector<Object>& items) :array(items) {
         currentSize = items.size() - 1;
         buildHeap();
     };
@@ -29,7 +28,7 @@ public:
         }
         int hole = ++currentSize;
         for (; o < array[hole / 2]; hole /= 2) {
-            array[hole] = move(array[hole / 2]);
+            array[hole] = std::move(array[hole / 2]);
         }
         array[hole] = o;
     }
@@ -40,25 +39,25 @@ public:
         }
         int hole = ++currentSize;
         for (; hole > 0 && o < array[hole / 2]; hole /= 2) {
-            array[hole] = move(array[hole / 2]);
+            array[hole] = std::move(array[hole / 2]);
         }
-        array[hole] = move(o);
+        array[hole] = std::move(o);
     }
 
     void deleteMin() {
         if (isEmpty()) {
-            throw runtime_error("this object is empty!");
+            throw std::runtime_error("this object is empty!");
         }
-        array[1] = move(array[currentSize--]);
+        array[1] = std::move(array[currentSize--]);
         percolateDown(1);
     }
 
     void deleteMin(Object& minO) {
         if (isEmpty()) {
-            throw runtime_error("this object is empty!");
+            throw std::runtime_error("this object is empty!");
         }
-        minO = move(array[1]);
-        array[1] = move(array[currentSize--]);
+        minO = std::move(array[1]);
+        array[1] = std::move(array[currentSize--]);
         percolateDown(1);
     }
 
@@ -74,7 +73,7 @@ private:
     }
 
     void percolateDown(int hole) {
-        auto temp = move(array[hole]);
+        auto temp = std::move(array[hole]);
         while (2 * hole <= currentSize) {
             int child = 2 * hole;
             if (child + 1 <= currentSize && array[child] > array[child + 1]) {
@@ -87,12 +86,12 @@ private:
                 break;
             }
         }
-        array[hole] = move(temp);
+        array[hole] = std::move(temp);
     }
 
 private:
     int currentSize;
-    vector<Object> array;
+    std::vector<Object> array;
 };
 
 #endif
