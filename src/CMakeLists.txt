@@ -1,2 +1,1 @@
 add_subdirectory(datastruct)
-add_subdirectory(algorithm)

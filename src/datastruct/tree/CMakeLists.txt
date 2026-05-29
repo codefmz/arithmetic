@@ -1,2 +1,2 @@
-add_subdirectory(avl)
+# add_subdirectory(avl)
 add_subdirectory(binarysearch)

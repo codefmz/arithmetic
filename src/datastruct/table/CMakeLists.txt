@@ -1,3 +1,6 @@
-add_subdirectory(vector)
 add_subdirectory(list)
+add_subdirectory(lock_free_stack)
+add_subdirectory(queue)
+add_subdirectory(ring)
 add_subdirectory(stack)
+add_subdirectory(vector)

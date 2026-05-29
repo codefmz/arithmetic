@@ -1,6 +1,4 @@
 file(GLOB SRC "./*.cpp")
 
-add_library(libbinarysearch STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(libbinarysearch PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(binarysearch STATIC ${SRC})
+target_include_directories(binarysearch PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

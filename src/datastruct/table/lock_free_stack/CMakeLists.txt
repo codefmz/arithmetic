@@ -1,6 +1,2 @@
-file(GLOB SRC "./*.cpp")
-
-add_library(liblock_free_stack STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(liblock_free_stack PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(lock_free_stack INTERFACE)
+target_include_directories(lock_free_stack INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

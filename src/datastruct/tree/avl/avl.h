@@ -3,40 +3,43 @@
 #include <exception>
 #include <memory>
 
-using namespace std;
-
-template<class Object, typename Comparator = less<Object>>
+template<class Object, typename Comparator = std::less<Object>>
 class AvlTree {
 public:
     AvlTree() {
         root = nullptr;
     }
+
     ~AvlTree() {
         makeEmpty(root);
     }
+
     AvlTree(const AvlTree& rhs) {
         root = clone(rhs.root);
     }
+
     AvlTree(AvlTree&& rhs) noexcept {
         root = rhs.root;
     }
+
     AvlTree& operator=(const AvlTree& rhs) {
         auto temp = rhs;
         swap(*this, temp);
     }
+
     AvlTree& operator=(AvlTree&& rhs) noexcept {
         swap(*this, move(rhs));
     }
 
-    const Object& findMin()const {
+    const Object& findMin() const {
         auto t = findMin(root);
         if (!t) {
             throw runtime_error(" this tree is empty!");
         }
         return t->o;
     }
-    const Object& findMax() const
-    {
+
+    const Object& findMax() const {
         auto t = findMax(root);
         if (!t) {
             throw runtime_error(" this tree is empty!");
@@ -47,9 +50,11 @@ public:
     bool contain(const Object& o) const {
         return contain(o, root);
     }
+
     bool isEmpty() const {
         return root->left || root->right;
     }
+
     void printTree(ostream& out = cout) const {
         printTree(root, out);
     }
@@ -60,9 +65,11 @@ public:
     void insert(const Object& o) {
         insert(o, root);
     }
+
     void insert(Object&& o) {
         insert(move(o), root);
     }
+
     void remove(const Object& o) {
         remove(o, root);
     }
@@ -79,9 +86,6 @@ private:
             :o(move(_o)), right(_right), left(_left), height(_height) { }
     };
 
-    AvlNode* root;
-    Comparator isLessThan;
-    static const int ALLOWED_IMBALANCE = 1;
     int height(AvlNode* t)const {
         return t ? t->height : -1;
     }
@@ -183,7 +187,7 @@ private:
         findMin(t->left);
     }
 
-    AvlNode* findMax(AvlNode* t)const {
+    AvlNode* findMax(AvlNode* t) const {
         if (t) {
             while (t->right) {
                 t = t->right;
@@ -220,7 +224,13 @@ private:
             printTree(t->right, out);
         }
     }
+
     AvlNode* clone(AvlNode* t) const {
         return t ? new AvlNode(t->o, clone(t->left), clone(t->right)) : t;
     }
+
+private:
+    AvlNode* root;
+    Comparator isLessThan;
+    static const int ALLOWED_IMBALANCE = 1;
 };

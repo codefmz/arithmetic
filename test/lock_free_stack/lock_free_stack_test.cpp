@@ -1,8 +1,9 @@
-#include <thread>
 #include <array>
-#include "lock_free_stack.h"
+#include <atomic>
+#include <thread>
+
 #include "gtest/gtest.h"
-#include "class.h"
+#include "lock_free_stack.h"
 
 using std::thread;
 
