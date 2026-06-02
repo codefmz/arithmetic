@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <mutex>
+#include <algorithm>
 
 #define KFIFO_MAX_SIZE (128 * 1024 * 1024)
 
@@ -19,7 +20,7 @@ public:
         MPMC
     };
 
-    KFIFO(MODE mode, uint32_t size): mMode(mode), in(0), out(0) {
+    KFIFO(MODE mode, uint32_t size): mMode(mode), mIn(0), mOut(0) {
         if (size == 0 || size > KFIFO_MAX_SIZE) {
             std::stringstream ss;
             ss << "size can't be 0 or more than " << KFIFO_MAX_SIZE << " cur is " << size;
@@ -27,7 +28,7 @@ public:
         }
 
         this->size = roundup_pow_of_two(size);
-        buf.resize(this->size);
+        mBuf.resize(this->size);
     }
 
     uint32_t put(const Node *data, uint32_t len) {
@@ -65,7 +66,7 @@ public:
 private:
     uint32_t putImpl(const Node *data, uint32_t len) {
         uint32_t l;
-        size_t size = mBuf.size();
+        uint32_t size = mBuf.size();
         len = std::min(len, size - mIn + mOut);
         /*
         * Ensure that we sample the fifo->out index -before- we
@@ -90,7 +91,7 @@ private:
 
     uint32_t getImpl(const Node *data, uint32_t len) { 
         uint32_t l;
-        size_t size = mBuf.size();
+        uint32_t size = mBuf.size();
         len = std::min(len, mIn - mOut);
         /*
         * Ensure that we sample the in index -before- we

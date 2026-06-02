@@ -10,7 +10,8 @@ using namespace std;
 //背包问题
 int dynamicBag(vector<std::pair<int, float>>& vct, int bagSize);
 
-//力扣第：198题
-int rob(vector<int>& nums);
+// 完全背包问题
+
+// 多重背包问题
 
 #endif

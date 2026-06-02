@@ -11,6 +11,7 @@ vector<int> topuSort(int num, const vector<vector<int>>& graph) {
     }
 
     queue<int> qi;
+
     //2.入度放到 queue 中
     for_each(degree.begin(), degree.end(), [&](int aNum) {
         if (aNum == 0) {
@@ -61,6 +62,31 @@ vector<vector<int>> bfs(TreeNode* root) {
     return ret;
 }
 
+void dfs(TreeNode* node, vector<int>& ans) {
+    if (!node) {
+        return;
+    }
+    dfs(node->left, ans);
+    ans.push_back(node->val);
+    dfs(node->right, ans);
+}
+
+vector<int> dfs(TreeNode* root) {
+    vector<int> ret;
+    stack<TreeNode*> nodeStack;
+    while (root || !nodeStack.empty()) {
+        while (root) {
+            nodeStack.push(root);
+            root = root->left;
+        }
+        root = nodeStack.top();
+        nodeStack.pop();
+        ret.push_back(root->val);
+        root = root->right;
+    }
+    return ret;
+}
+
 vector<int> dijstra(int num, const vector<vector<int>>& vcts, int src) {
     vector<vector<pair<int, int>>> graph(num);
     for (auto& vct : vcts) {
@@ -89,32 +115,8 @@ vector<int> dijstra(int num, const vector<vector<int>>& vcts, int src) {
             }
         }
     }
+
     return dis;
-}
-
-void dfs(TreeNode* node, vector<int>& ans) {
-    if (!node) {
-        return;
-    }
-    dfs(node->left, ans);
-    ans.push_back(node->val);
-    dfs(node->right, ans);
-}
-
-vector<int> dfs(TreeNode* root) {
-    vector<int> ret;
-    stack<TreeNode*> nodeStack;
-    while (root || !nodeStack.empty()) {
-        while (root) {
-            nodeStack.push(root);
-            root = root->left;
-        }
-        root = nodeStack.top();
-        nodeStack.pop();
-        ret.push_back(root->val);
-        root = root->right;
-    }
-    return ret;
 }
 
 vector<int> dijstra2(int num, const vector<vector<int>>& vcts, int src) {

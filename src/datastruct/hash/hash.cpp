@@ -1,8 +1,9 @@
 #include "hash.h"
+#include <cmath>
 
 bool isPrime(size_t aNum) 
 {
-    for (size_t i = 2; i <= sqrt(aNum); ++i) {
+    for (size_t i = 2; i <= std::sqrt(aNum); ++i) {
         if (aNum % i == 0) {
             return false;
         }

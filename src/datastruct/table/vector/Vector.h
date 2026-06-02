@@ -1,3 +1,6 @@
+#ifndef MY_VECTOR_H
+#define MY_VECTOR_H
+
 #include <memory>
 #include <utility>
 
@@ -139,3 +142,5 @@ private:
 
 template< class Object>
 std::allocator<Object> Vector<Object>::allo;
+
+#endif

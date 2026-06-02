@@ -115,9 +115,9 @@ public:
     };
 
     List& operator=(List&& list) noexcept {
-        swap(theSize, list.theSize);
-        swap(head, list.head);
-        swap(tail, list.tail);
+        std::swap(theSize, list.theSize);
+        std::swap(head, list.head);
+        std::swap(tail, list.tail);
         return *this;
     }
 

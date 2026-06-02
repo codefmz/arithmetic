@@ -1,7 +1,11 @@
-#include "../hash.h"
+#ifndef HASH_SQUARE_H
+#define HASH_SQUARE_H
+
+#include "hash.h"
+#include <iostream>
+#include <utility>
 #include <vector>
 
-using namespace std;
 
 // 开放寻址法解决hash 冲突
 template <typename HashObj>
@@ -60,6 +64,15 @@ public:
         return false;
     }
 
+    void printHashTable() {
+        for (auto& obj : array) {
+            if (obj.type == ACTIVE) {
+                std::cout << obj.element << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+
 private:
     enum EntryType {
         ACTIVE = 0,
@@ -70,13 +83,11 @@ private:
         HashObj element;
         EntryType type;
         HashEntry(const HashObj& e = HashObj{}, EntryType _type = EMPTY) :element(e), type(_type) {};
-        HashEntry(HashObj&& e, EntryType _type = EMPTY) :element(move(e)), type(_type) {};
+        HashEntry(HashObj&& e, EntryType _type = EMPTY) :element(std::move(e)), type(_type) {};
     };
 
-    vector<HashEntry> array;
-    int currentSize;
     void rehash() {
-        vector<HashEntry> oldArray = array;
+        std::vector<HashEntry> oldArray = array;
         array.resize(nextPrime(2 * oldArray.size()));
         for (auto& entry : array) {
             entry.type = EMPTY;
@@ -85,7 +96,7 @@ private:
         currentSize = 0;
         for (auto& entry : oldArray) {
             if (entry.type == ACTIVE) {
-                insert(move(entry.element));
+                insert(std::move(entry.element));
             }
         }
     }
@@ -112,14 +123,9 @@ private:
         return hh(x) % array.size();
     }
 
-    void printHashTable() {
-        for (auto & list : theList) {
-            for (auto & obj : array) {
-                if (obj->type == ACTIVE) {
-                    cout << obj.
-                }
-            }
-            cout << endl;
-        }
-    }
+private:
+    std::vector<HashEntry> array;
+    int currentSize;
 };
+
+#endif

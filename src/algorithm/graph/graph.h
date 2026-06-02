@@ -16,6 +16,7 @@
 using namespace std;
 
 //1. 拓扑排序
+// 解决了一个有依赖关系的任务，应该以什么顺序执行的问题
 vector<int> topuSort(int num, const vector<vector<int>>& graph);
 
 //2.广度优先算法
@@ -24,6 +25,7 @@ vector<vector<int>> bfs(TreeNode* root);
 //3.深度优先算法
 //递归法实现
 void dfs(TreeNode* node, vector<int>& ans);
+
 //迭代法实现
 vector<int>  dfs(TreeNode* node);
 

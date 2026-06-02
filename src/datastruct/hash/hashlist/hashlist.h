@@ -1,5 +1,5 @@
-#ifndef MY_HASH_H
-#define MY_HASH_H
+#ifndef HASH_LIST_H
+#define HASH_LIST_H
 
 #include <string>
 #include <vector>
@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <random>
 #include <map>
+#include <iostream>
 #include "hash.h"
 
 //散列： 分离链接法

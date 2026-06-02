@@ -16,9 +16,9 @@ public:
 };
 
 template<>
-class mhash<string> {
+class mhash<std::string> {
 public:
-    size_t operator()(const string& key) const {
+    size_t operator()(const std::string& key) const {
         size_t hash_val = 0;
         for (char c : key) {
             hash_val = 37 * hash_val + c;
@@ -28,7 +28,7 @@ public:
 };
 
 template<>
-class cd<int> {
+class mhash<int> {
 public:
     size_t operator()(const int& key) const {
         return key;

@@ -2879,3 +2879,37 @@ TEST_F(stackTest, test2) {
 	getPostfix(vct, splitVct);
 	calculateStack(vct);
 }
+
+
+int rob(vector<int>& nums) {
+    int length = nums.size();
+    int pre = 0, middle = 0, next = 0;
+    if (length == 1) {
+        return nums[0];
+    }
+
+    if (length == 2) {
+        return max(nums[0], nums[1]);
+    }
+
+    if (length == 3) {
+        return max(nums[1], nums[0] + nums[2]);
+    }
+
+    pre = nums[0];
+    middle = max(nums[0], nums[1]);
+    next = max(nums[1], nums[0] + nums[2]);
+    int ret;
+
+    int left, right;
+    for (int i = 3; i < length; i++) {
+        right = nums[i] + middle;
+        left = nums[i - 1] + pre;
+        ret = right > left ? right : left;
+        pre = middle;
+        middle = next;
+        next = ret;
+    }
+
+    return next;
+}

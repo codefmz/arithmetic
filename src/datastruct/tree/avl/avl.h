@@ -1,7 +1,10 @@
+#include <algorithm>
+#include <functional>
 #include <iostream>
-#include <string>
-#include <exception>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 template<class Object, typename Comparator = std::less<Object>>
 class AvlTree {
@@ -24,17 +27,19 @@ public:
 
     AvlTree& operator=(const AvlTree& rhs) {
         auto temp = rhs;
-        swap(*this, temp);
+        std::swap(*this, temp);
+        return *this;
     }
 
     AvlTree& operator=(AvlTree&& rhs) noexcept {
-        swap(*this, move(rhs));
+        std::swap(*this, rhs);
+        return *this;
     }
 
     const Object& findMin() const {
         auto t = findMin(root);
         if (!t) {
-            throw runtime_error(" this tree is empty!");
+            throw std::runtime_error(" this tree is empty!");
         }
         return t->o;
     }
@@ -42,20 +47,20 @@ public:
     const Object& findMax() const {
         auto t = findMax(root);
         if (!t) {
-            throw runtime_error(" this tree is empty!");
+            throw std::runtime_error(" this tree is empty!");
         }
         return t->o;
     }
 
     bool contain(const Object& o) const {
-        return contain(o, root);
+        return contains(o, root);
     }
 
     bool isEmpty() const {
-        return root->left || root->right;
+        return root == nullptr;
     }
 
-    void printTree(ostream& out = cout) const {
+    void printTree(std::ostream& out = std::cout) const {
         printTree(root, out);
     }
     void makeEmpty() {
@@ -67,7 +72,7 @@ public:
     }
 
     void insert(Object&& o) {
-        insert(move(o), root);
+        insert(std::move(o), root);
     }
 
     void remove(const Object& o) {
@@ -83,7 +88,7 @@ private:
         AvlNode(const Object& _o, AvlNode* _left, AvlNode* _right, int _height = 0)
             : o(_o), right(_right), left(_left), height(_height) { }
         AvlNode(Object&& _o, AvlNode* _left, AvlNode* _right, int _height = 0)
-            :o(move(_o)), right(_right), left(_left), height(_height) { }
+            :o(std::move(_o)), right(_right), left(_left), height(_height) { }
     };
 
     int height(AvlNode* t)const {
@@ -107,22 +112,22 @@ private:
                 doubleWithRightChild(t);
             }
         }
-        t->height = max(height(t->left), height(t->right)) + 1;
+        t->height = std::max(height(t->left), height(t->right)) + 1;
     }
     void rotateWithLeftChild(AvlNode*& k2) {
         AvlNode* k1 = k2->left;
         k2->left = k1->right;
         k1->right = k2;
-        k1->height = max(height(k1->left), height(k1->right)) + 1;
-        k2->height = max(height(k2->left), height(k2->right)) + 1;
+        k1->height = std::max(height(k1->left), height(k1->right)) + 1;
+        k2->height = std::max(height(k2->left), height(k2->right)) + 1;
         k2 = k1;
     }
     void rotateWithRightChild(AvlNode*& k2) {
         AvlNode* k1 = k2->right;
         k2->right = k1->left;
         k1->left = k2;
-        k1->height = max(height(k1->left), height(k1->right)) + 1;
-        k2->height = max(height(k2->left), height(k2->right)) + 1;
+        k1->height = std::max(height(k1->left), height(k1->right)) + 1;
+        k2->height = std::max(height(k2->left), height(k2->right)) + 1;
         k2 = k1;
     }
 
@@ -150,11 +155,11 @@ private:
 
     void insert(Object&& o, AvlNode*& t) {
         if (!t) {
-            t = new AvlNode(move(o), nullptr, nullptr);
+            t = new AvlNode(std::move(o), nullptr, nullptr);
         } else if (isLessThan(o, t->o)) {
-            insert(move(o), t->left);
+            insert(std::move(o), t->left);
         } else if (isLessThan(t->o, o)) {
-            insert(move(o), t->right);
+            insert(std::move(o), t->right);
         }
         //这里没有对相等的情况进行处理
         balance(t);
@@ -196,13 +201,13 @@ private:
         return t;
     }
 
-    bool contains(const Object& o, AvlNode* t) {
+    bool contains(const Object& o, AvlNode* t) const {
         if (!t) {
             return false;
         } else if (isLessThan(o, t->o)) {
-            return contain(o, t->left);
+            return contains(o, t->left);
         } else if (isLessThan(t->o, o)) {
-            return contain(o, t->right);
+            return contains(o, t->right);
         } else {
             return true;
         }
@@ -217,10 +222,10 @@ private:
         }
     }
 
-    void printTree(AvlNode* t, ostream& out) const {
+    void printTree(AvlNode* t, std::ostream& out) const {
         if (t) {
             printTree(t->left, out);
-            out << t->o << endl;
+            out << t->o << std::endl;
             printTree(t->right, out);
         }
     }

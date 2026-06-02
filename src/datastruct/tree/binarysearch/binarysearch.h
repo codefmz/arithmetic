@@ -1,8 +1,9 @@
 #include <memory>
+#include <ostream>
 #include <iostream>
 #include <string>
 #include <exception>
-#include <stack>
+#include <queue>
 
 template<class Object, typename Comparator = std::less<Object>>
 class BinarySearchTree {
@@ -35,7 +36,7 @@ public:
     const Object& findMin() const {
         auto t = findMin(root);
         if (!t) {
-            throw runtime_error(" this tree is empty!");
+            throw std::runtime_error(" this tree is empty!");
         }
         return t->o;
     }
@@ -43,7 +44,7 @@ public:
     const Object& findMax() const {
         auto t = findMax(root);
         if (!t) {
-            throw runtime_error(" this tree is empty!");
+            throw std::runtime_error(" this tree is empty!");
         }
         return t->o;
     }
@@ -56,7 +57,7 @@ public:
         return root->left || root->right;
     }
 
-    void printTree(ostream& out = cout) const {
+    void printTree(std::ostream& out = std::cout) const {
         printTree(root, out);
     }
 
@@ -65,11 +66,20 @@ public:
     }
 
     void insert(const Object& o) {
+        if (root == nullptr) {
+            root = new BinaryNode(o, nullptr, nullptr);
+            return;
+        }
+
         insert(o, root);
     }
 
     void insert(Object&& o) {
-        insert(move(o), root);
+        if (root == nullptr) {
+            root = new BinaryNode(std::move(o), nullptr, nullptr);
+            return;
+        }
+        insert(std::move(o), root);
     }
 
     void remove(const Object& o) {
@@ -82,35 +92,50 @@ private:
         BinaryNode* left;
         BinaryNode* right;
         BinaryNode(const Object& _o, BinaryNode* _left, BinaryNode* _right) : o(_o), right(_right), left(_left) {}
-        BinaryNode(Object&& _o, BinaryNode* _left, BinaryNode* _right) : o(move(_o)), right(_right), left(_left) {}
+        BinaryNode(Object&& _o, BinaryNode* _left, BinaryNode* _right) : o(std::move(_o)), right(_right), left(_left) {}
     };
 
-    void insert(const Object& o, BinaryNode*& t) {
-        while (t) {
-            if (isLessThan(o, t->o)) {
-                t = t->left;
-            } else {
-                t = t->right;
-            }
-        }
-
-        t = new BinaryNode(o, nullptr, nullptr);
-    }
-
-    void insert(Object&& o, BinaryNode*& t) {
-        while (t) {
-            if (isLessThan(o, t->o)) {
-                t = t->left;
-            } else {
-                t = t->right;
-            }
-        }
-
-        t = new BinaryNode(std::move(o), nullptr, nullptr);
-    }
-
-    void remove(const Object& o, BinaryNode* t) {
+    void insert(const Object& o, BinaryNode* t) {
         BinaryNode *parent = nullptr;
+        while (t) {
+            parent = t;
+            if (isLessThan(o, t->o)) {
+                t = t->left;
+                if (t == nullptr) {
+                    parent->left = new BinaryNode(o, nullptr, nullptr);
+                    return;
+                }
+            } else {
+                t = t->right;
+                if (t == nullptr) {
+                    parent->right = new BinaryNode(o, nullptr, nullptr);
+                    return;
+                }
+            }
+        }
+    }
+
+    void insert(Object&& o, BinaryNode* t) {
+        BinaryNode *parent = nullptr;
+        while (t) {
+            parent = t;
+            if (isLessThan(o, t->o)) {
+                t = t->left;
+                if (t == nullptr) {
+                    parent->left = new BinaryNode(std::move(o), nullptr, nullptr);
+                    return;
+                }
+            } else {
+                t = t->right;
+                if (t == nullptr) {
+                    parent->right = new BinaryNode(std::move(o), nullptr, nullptr);
+                    return;
+                }
+            }
+        }
+    }
+
+    void remove(const Object& o, BinaryNode* t, BinaryNode* parent = nullptr) {
         while (t) {
             if (isLessThan(o, t->o)) {
                 parent = t;
@@ -118,28 +143,41 @@ private:
             } else if (isLessThan(t->o, o)) {
                 parent = t;
                 t = t->right;
-            }
-
-            if (t->right) {
-                BinaryNode* min = findMin(t->right);
-                t->o = min->o;
-                return remove(min->o, min);
-            }
-
-            if (parent) {
-                if (parent->left == t) {
-                    parent->left = t->left;
-                } else {
-                    parent->right = t->left;
+            } else {
+                if (t->right) {
+                    BinaryNode* min = findMin(t->right, parent);
+                    t->o = min->o;
+                    remove(o, min, parent); // 这里重新遍历一遍了，应该findMin的时候就把父节点也返回了，这样就不需要重新遍历了
+                    return;
                 }
+
+                if (parent) {
+                    if (parent->left == t) {
+                        parent->left = t->left;
+                    } else {
+                        parent->right = t->left;
+                    }
+                }
+                delete t;
+                t = nullptr;
             }
-            delete t;
         }
     }
 
     BinaryNode* findMin(BinaryNode* t) const {
         if (t) {
             while (t->left) {
+                t = t->left;
+            }
+        }
+
+        return t;
+    }
+
+    BinaryNode* findMin(BinaryNode* t, BinaryNode*& parent) const {
+        if (t) {
+            while (t->left) {
+                parent = t;
                 t = t->left;
             }
         }
@@ -176,10 +214,11 @@ private:
             return;
         }
 
-        std::stack<BinaryNode*> s;
+        std::queue<BinaryNode*> s;
         s.push(t);
         while (!s.empty()) {
-            t = s.top();
+            t = s.front();
+            s.pop();
             if (t->left) {
                 s.push(t->left);
             }
@@ -192,15 +231,16 @@ private:
         }
     }
 
-    void printTree(BinaryNode* t, ostream& out) const {
+    void printTree(BinaryNode* t, std::ostream& out) const {
         if (!t) {
             return;
         }
 
-        std::stack<BinaryNode*> s;
+        std::queue<BinaryNode*> s;
         s.push(t);
         while (!s.empty()) {
-            t = s.top();
+            t = s.front();
+            s.pop();
             if (t->left) {
                 s.push(t->left);
             }
@@ -209,7 +249,7 @@ private:
                 s.push(t->right);
             }
 
-            out << t->val << " ";
+            out << t->o << " ";
         }
     }
 

@@ -5,8 +5,6 @@
 #include "gtest/gtest.h"
 #include "lock_free_stack.h"
 
-using std::thread;
-
 class lockFreeStackTest : public ::testing::Test {
 protected:
     lockFreeStackTest() {

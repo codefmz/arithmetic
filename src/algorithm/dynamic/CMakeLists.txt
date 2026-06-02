@@ -1,6 +1,5 @@
 file(GLOB SRC "./*.cpp")
 
-add_library(libdynamic STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(libdynamic PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(dynamic STATIC ${SRC})
+target_link_libraries(dynamic PUBLIC hash)
+target_include_directories(dynamic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
