@@ -1,6 +1,4 @@
 file(GLOB SRC "./*.cpp")
 
-add_library(libsort STATIC ${SRC})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(libsort PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+add_library(sort STATIC ${SRC})
+target_include_directories(sort PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

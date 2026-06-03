@@ -65,8 +65,7 @@ void quickHelp(int* arr, int left, int right) {
         int pivot = left;
         int index = left + 1;
         for (int i = index; i <= right; i++) {
-            if (arr[i] < arr[pivot])
-            {
+            if (arr[i] < arr[pivot]) {
                 std::swap(arr[index], arr[i]);
                 ++index;
             }
@@ -130,12 +129,12 @@ void quickHelp3(int* arr, size_t left, size_t right) {
             while (arr[++l] < pivot) {};
             while (arr[--r] > pivot) {};
             if (l < r) {
-                swap(arr[l], arr[r]);
+                std::swap(arr[l], arr[r]);
             } else {
                 break;
             }
         }
-        swap(arr[l], arr[right - 1]);
+        std::swap(arr[l], arr[right - 1]);
         if (l > 0) {
             quickHelp3(arr, left, l - 1);
         }
@@ -154,18 +153,18 @@ void quickHelp3(int* arr, size_t left, size_t right) {
 int median3(int* arr, size_t left, size_t right) {
     int centor = (left + right) / 2;
     if (arr[centor] < arr[left]) {
-        swap(arr[left], arr[centor]);
+        std::swap(arr[left], arr[centor]);
     }
 
     if (arr[right] < arr[left]) {
-        swap(arr[right], arr[left]);
+        std::swap(arr[right], arr[left]);
     }
 
     if (arr[right] < arr[centor]) {
-        swap(arr[right], arr[centor]);
+        std::swap(arr[right], arr[centor]);
     }
 
-    swap(arr[centor], arr[right - 1]);
+    std::swap(arr[centor], arr[right - 1]);
     return arr[right - 1];
 }
 

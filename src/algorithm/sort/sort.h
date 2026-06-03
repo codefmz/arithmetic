@@ -6,8 +6,6 @@
 #include <ctime>
 #include <iostream>
 
-using namespace std;
-
 void bubble(int arr[], size_t len);
 
 void select(int* arr, size_t len);

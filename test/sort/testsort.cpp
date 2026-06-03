@@ -21,7 +21,7 @@ TEST_F(sortTest, test1) {
     sort(arr, len, quick3);
 
     for (size_t i = 0; i < len; i++) {
-        cout << arr[i] << " ";
+        std::cout << arr[i] << " ";
     }
 
     delete[] arr;

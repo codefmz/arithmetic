@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 TOP_DIR=$(cd "$(dirname "$0")"; pwd)
 echo "TOP_DIR=$TOP_DIR"
 
@@ -47,7 +49,7 @@ while true; do
 done
 
 cmake_params=""
-if [ "$debug" == "y" ]; then
+if [ "$debug" = "y" ]; then
     cmake_params="-DCMAKE_BUILD_TYPE=Debug"
 else
     cmake_params="-DCMAKE_BUILD_TYPE=Release"
@@ -57,9 +59,18 @@ if [ "$target" != "" ]; then
     cmake_params="$cmake_params -DTARGET=$target"
 fi
 
-if [ "$rebuild" == "y" ]; then
+if [ "$rebuild" = "y" ]; then
     rm -rf build
-    cmake -B build --preset=default $cmake_params
+fi
+
+if [ -f build/CMakeCache.txt ] && grep -q "VCPKG_MANIFEST_MODE:BOOL=OFF" build/CMakeCache.txt; then
+    echo "build directory was configured with VCPKG_MANIFEST_MODE=OFF."
+    echo "Please run: sh $(basename "$0") -r"
+    exit 1
+fi
+
+if [ "$rebuild" = "y" ] || [ ! -f build/CMakeCache.txt ]; then
+    cmake --preset=default $cmake_params
 fi
 
 echo "compile target = ${target}, platform = ${platform}"

@@ -1,8 +1,11 @@
 #include "radixtree.h"
-#include "base.h"
-#include "log.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define OK 0
+#define ERROR 1
+#define LOG_ERROR(...) fprintf(stderr, __VA_ARGS__)
 
 #define LEVEL_32 16
 

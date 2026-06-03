@@ -1,4 +1,5 @@
 ﻿#include "graph.h"
+#include <climits>
 
 vector<int> topuSort(int num, const vector<vector<int>>& graph) {
     //1. 获取入度

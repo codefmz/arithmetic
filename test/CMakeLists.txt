@@ -1,3 +1,7 @@
 add_subdirectory(lock_free_stack)
 add_subdirectory(binarysearch)
 add_subdirectory(avl)
+add_subdirectory(graph)
+add_subdirectory(merge)
+add_subdirectory(iterate)
+add_subdirectory(sort)

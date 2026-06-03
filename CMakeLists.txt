@@ -17,8 +17,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 find_package(GTest CONFIG REQUIRED)
 find_package(plog CONFIG REQUIRED)
 
-add_subdirectory(src)
 add_subdirectory(tub)
+add_subdirectory(src)
 enable_testing()
 add_subdirectory(test)
 

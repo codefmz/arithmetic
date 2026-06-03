@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <climits>
+#include <cmath>
 #include "merge.h"
 
 float findClosestDis(vector<pair<int, int>>& points) {
@@ -45,4 +47,3 @@ float divideMerge(vector<pair<int, int>>& points, int left, int right) {
 
     return INT_MAX / 2;
 }
-
