@@ -6,7 +6,7 @@
       "name": "default",
       "inherits": "vcpkg",
       "environment": {
-        "VCPKG_ROOT": "/pkg/vcpkg"
+        "VCPKG_ROOT": "D:/code/3rd/vcpkg"
       },
       "cacheVariables": {
         "VCPKG_INSTALLED_DIR": "${sourceDir}/build/vcpkg_installed",

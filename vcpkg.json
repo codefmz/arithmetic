@@ -1,12 +1,7 @@
 {
+  "builtin-baseline": "524e8d21b9feccf5359169241c3158e8946da1fd", 
   "dependencies": [
-    {
-      "name": "gtest",
-      "version>=": "1.14.0"
-    },
-    {
-      "name": "plog",
-      "version>=": "1.1.10"
-    }
+    "gtest",
+    "plog"
   ]
 }

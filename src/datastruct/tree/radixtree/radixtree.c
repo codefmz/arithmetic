@@ -30,6 +30,8 @@ void* RadixTreeCreate32(int preallocate)
     tree = (RadixTree*)malloc(sizeof(RadixTree));
     root->value = INVALID_VALUE;
     tree->root = root;
+
+    return tree;
 }
 
 void RadixTreeFreeNode(RadixTreeNode* node)

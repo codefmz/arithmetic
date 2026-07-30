@@ -63,13 +63,8 @@ if [ "$rebuild" = "y" ]; then
     rm -rf build
 fi
 
-if [ -f build/CMakeCache.txt ] && grep -q "VCPKG_MANIFEST_MODE:BOOL=OFF" build/CMakeCache.txt; then
-    echo "build directory was configured with VCPKG_MANIFEST_MODE=OFF."
-    echo "Please run: sh $(basename "$0") -r"
-    exit 1
-fi
 
-if [ "$rebuild" = "y" ] || [ ! -f build/CMakeCache.txt ]; then
+if [ "$rebuild" = "y" ] ; then
     cmake --preset=default $cmake_params
 fi
 
